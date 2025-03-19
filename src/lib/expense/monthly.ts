@@ -416,7 +416,7 @@ export function renderMonthlyExpensesTimeline(
 
 export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string, never>) {
   const id = "#d3-current-month-breakdown";
-  const BAR_HEIGHT = rem(20);
+  const BAR_HEIGHT = rem(40);
   const TEXT_WIDTH = rem(135);
   const svg = d3.select(id),
     margin = { top: 0, right: rem(160), bottom: rem(20), left: rem(100) },
@@ -427,7 +427,7 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const x = d3.scaleLinear().range([0, width]);
-  const y = d3.scaleBand().paddingInner(0.1).paddingOuter(0);
+  const y = d3.scaleBand().paddingInner(0.5).paddingOuter(0);
 
   const xAxis = g.append("g").attr("class", "axis y");
   const yAxis = g.append("g").attr("class", "axis y dark");

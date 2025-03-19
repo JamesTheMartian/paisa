@@ -300,7 +300,7 @@ const MaterialUI = {
 
 const COLORS = {
   gain: "#b2df8a",
-  gainText: "#48c78e",
+  gainText: MaterialUI.green['800'],
   loss: "#fb9a99",
   lossText: "#f14668",
   danger: "#cc0f35",
@@ -310,7 +310,7 @@ const COLORS = {
   diff: "#4a4a4a",
 
   // accounts
-  primary: MaterialUI.deeppurple.a100,
+  primary: MaterialUI.green.a400,
   secondary: MaterialUI.lightblue.a400,
   tertiary: MaterialUI.amber.a400,
   neutral: "hsl(0, 0%, 48%)",
