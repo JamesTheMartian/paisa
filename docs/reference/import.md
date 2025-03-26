@@ -252,13 +252,14 @@ Finds the first cell above the current row in the given column. If
 {{findAbove B regexp="LIMITED"}}
 ```
 
-#### `#!typescript findBelow(column: string, {regexp?: string}): string`
+#### `#!typescript findBelow(column: string, {row?: number}, {regexp?: string}): string`
 
 Finds the first cell below the current row in the given column. If
 `regexp` is provided, the search will continue till a match is found
 
 ```handlebars
 {{findBelow B regexp="LIMITED"}}
+{{findBelow B row=2}}
 ```
 
 #### `#!typescript acronym(str: string): string`
