@@ -44,13 +44,28 @@
   
   // Function to get appropriate icon color
   function getCategoryBorder(account: string): string {
-    // You can map account types to specific colors or use your existing color system
     return accountColorStyle(firstName(account)).replace('color:', 'border-color:');
   }
 
-    // Function to get appropriate icon background color
-    function getCategoryBackground(account: string): string {
-    // You can map account types to specific colors or use your existing color system
+  function unclearStyle(posting: Posting): string {
+    var border
+    var bg
+    if (posting.status === "pending" || posting.status === "uncleared") {
+      border = "border: dashed;"
+      bg = "background: none;"
+    }
+    return border + bg + ";"
+  }
+  function unclearIconStyle(posting: Posting): string {
+    var color
+    if (posting.status === "pending" || posting.status === "uncleared") {
+      color = "color: #8A8A9B;"
+    }
+    return color + ";"
+  }
+
+  // Function to get appropriate icon background color
+  function getCategoryBackground(account: string): string {
     return accountColorStyle(firstName(account)).replace('color:', 'background-color:');
   }
 </script>
@@ -77,8 +92,7 @@
     height: 40px;
     padding-top: 4px;
     border-radius: 8px;
-    border: solid;
-    border-width: 1px;
+    border: 1px solid;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -149,8 +163,8 @@
 </style>
 
 <div class="transaction-item has-background-white">
-  <div class="category-icon has-text-grey truncate custom-icon" style="{getCategoryBorder(posting.account)} {getCategoryBackground(posting.account)}" title={posting.account}>
-    <span style={accountColorStyle(firstName(posting.account))}
+  <div class="category-icon has-text-grey truncate custom-icon" style="{getCategoryBackground(posting.account)} {unclearStyle(posting)} {getCategoryBorder(posting.account)}" title={posting.account}>
+    <span style="color:#000; {unclearIconStyle(posting)}"
       >{iconText(posting.account)}</span
     >
   </div>
@@ -166,10 +180,7 @@
   </div>
   
   <div class="transaction-date">
-    <div class="status-container">
-      <PostingStatus {posting} />
-    </div>
-    {posting.date.format("DD MMM YYYY")}
+    {posting.date.format("DD MMM")}
   </div>
   
   <div class="transaction-amount" style={getAmountColor(posting.account)}>
