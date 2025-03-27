@@ -1,5 +1,6 @@
 <script lang="ts">
   import { accountColorStyle } from "$lib/colors";
+  import COLORS from "$lib/colors";
   import { iconText } from "$lib/icon";
   import {
     formatCurrency,
@@ -19,13 +20,26 @@
   }
   
   // Helper function to determine if a transaction is an expense
-  function isExpense(amount: number): boolean {
-    return amount < 0;
+  function isExpense(account: string): boolean {
+    return firstName(account) === "Expenses" || firstName(account) === "Liabilities";
   }
-  
+
   // Helper function to get appropriate amount class
-  function getAmountClass(amount: number): string {
-    return isExpense(amount) ? "amount-expense" : "amount-income";
+  function getAmountClass(account: string): string {
+    return isExpense(account) ? "amount-expense" : "amount-income";
+  }
+
+  function getAmountColor(account: string) {
+    const normalized = getAmountClass(account);
+    let color = "hsl(0, 0%, 48%)";
+
+    if (normalized === "amount-expense") {
+      color = (COLORS as Record<string, string>)["expenses"];
+    } else if (normalized === "amount-income") {
+      color = (COLORS as Record<string, string>)["income"];
+    }
+
+    return `color: ${color};`;
   }
   
   // Function to get appropriate icon background color
@@ -178,7 +192,7 @@
     {posting.date.format("DD MMM YYYY")}
   </div>
   
-  <div class="transaction-amount {getAmountClass(posting.amount)}">
+  <div class="transaction-amount" style={getAmountColor(posting.account)}>
     {formatCurrency(posting.amount)}
   </div>
 </div>
