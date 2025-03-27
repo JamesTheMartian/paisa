@@ -102,6 +102,16 @@
       16
     );
   });
+
+  // Add filter state
+    let currentFilter = "all"; // "all", "income", "expense"
+  
+  function filterTransactions(transactions) {
+    if (currentFilter === "all") return transactions;
+    if (currentFilter === "income") return transactions.filter(t => t.postings[0].amount > 0);
+    if (currentFilter === "expense") return transactions.filter(t => t.postings[0].amount < 0);
+    return transactions;
+  }
 </script>
 
 <section class="section" class:is-hidden={!isEmpty}>
@@ -330,9 +340,17 @@
                       >Recent Transactions</a
                     >
                   </p>
+                  <div class="filter-container">
+                    <button class="filter-btn {currentFilter === 'all' ? 'active' : ''}" 
+                            on:click={() => currentFilter = 'all'}>All</button>
+                    <button class="filter-btn {currentFilter === 'income' ? 'active' : ''}" 
+                            on:click={() => currentFilter = 'income'}>Income</button>
+                    <button class="filter-btn {currentFilter === 'expense' ? 'active' : ''}" 
+                            on:click={() => currentFilter = 'expense'}>Expenses</button>
+                  </div>
                   <div>
                     <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
-                      {#each _.take(transactions, 20) as t}
+                      {#each filterTransactions(transactions) as t}
                         <div class="mr-3 is-flex-grow-1">
                           <TransactionCard {t} />
                         </div>
