@@ -104,12 +104,24 @@
   });
 
   // Add filter state
-    let currentFilter = "all"; // "all", "income", "expense"
-  
-  function filterTransactions(transactions) {
+  let currentFilter = "all"; // "all", "income", "expense"
+
+  const incomeAccounts = ["Income", "Assets"];
+
+  function filterTransactions(transactions: Transaction[]) {
     if (currentFilter === "all") return transactions;
-    if (currentFilter === "income") return transactions.filter(t => t.postings[0].amount > 0);
-    if (currentFilter === "expense") return transactions.filter(t => t.postings[0].amount < 0);
+    if (currentFilter === "income") {
+      return transactions.filter(t => {
+        // Check if any posting account starts with "Income"
+        return t.postings.some(posting => posting.account.startsWith("Income"));
+      });
+    }
+    if (currentFilter === "expense") {
+      // Transactions that don't have any Income accounts are expenses
+      return transactions.filter(t => {
+        return !t.postings.some(posting => posting.account.startsWith("Income"));
+      });
+    }
     return transactions;
   }
 </script>
@@ -335,24 +347,24 @@
             <div class="tile is-parent is-12">
               <article class="tile is-child">
                 <div class="content">
-                  <p class="subtitle">
+                  <div class="subtitle transaction-top">
                     <a class="secondary-link has-text-grey" href="/ledger/transaction"
                       >Recent Transactions</a
                     >
-                  </p>
-                  <div class="filter-container">
-                    <button class="filter-btn {currentFilter === 'all' ? 'active' : ''}" 
-                            on:click={() => currentFilter = 'all'}>All</button>
-                    <button class="filter-btn {currentFilter === 'income' ? 'active' : ''}" 
-                            on:click={() => currentFilter = 'income'}>Income</button>
-                    <button class="filter-btn {currentFilter === 'expense' ? 'active' : ''}" 
-                            on:click={() => currentFilter = 'expense'}>Expenses</button>
+                    <div class="filter-container">
+                      <button class="filter-btn {currentFilter === 'all' ? 'active' : ''}" 
+                              on:click={() => currentFilter = 'all'}>All</button>
+                      <button class="filter-btn {currentFilter === 'income' ? 'active' : ''}" 
+                              on:click={() => currentFilter = 'income'}>Income</button>
+                      <button class="filter-btn {currentFilter === 'expense' ? 'active' : ''}" 
+                              on:click={() => currentFilter = 'expense'}>Expenses</button>
+                    </div>
                   </div>
                   <div>
                     <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
-                      {#each filterTransactions(transactions) as t}
+                      {#each filterTransactions(transactions) as transaction}
                         <div class="mr-3 is-flex-grow-1">
-                          <TransactionCard {t} />
+                          <TransactionCard t={transaction} />
                         </div>
                       {/each}
                     </UntypedMasonryGrid>
@@ -368,12 +380,53 @@
 </section>
 
 <style lang="scss">
-  p.subtitle {
+  .subtitle {
     margin-bottom: 0.5rem !important;
   }
 
-  p.subtitle a.secondary-link {
+  .subtitle a.secondary-link {
     text-transform: uppercase;
     font-size: 1rem;
+  }
+  
+  .transaction-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Filter buttons styling */
+  .filter-container {
+    display: flex;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #f0f0f0;
+    color: #666;
+  }
+
+  html[data-theme=dark] * .filter-btn:not(.active) {
+    background-color: hsl(215, 18%, 10%);
+    color: #ccc;
+  }
+
+  .filter-btn.active {
+    background-color: #006064;
+    color: white;
+  }
+
+  .filter-btn:hover:not(.active) {
+    background-color: #e0e0e0;
+  }
+
+  html[data-theme=dark] * .filter-btn:hover:not(.active) {
+    background-color: hsl(215, 18%, 15%);
   }
 </style>

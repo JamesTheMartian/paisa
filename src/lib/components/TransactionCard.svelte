@@ -42,10 +42,16 @@
     return `color: ${color};`;
   }
   
-  // Function to get appropriate icon background color
+  // Function to get appropriate icon color
   function getCategoryBorder(account: string): string {
     // You can map account types to specific colors or use your existing color system
     return accountColorStyle(firstName(account)).replace('color:', 'border-color:');
+  }
+
+    // Function to get appropriate icon background color
+    function getCategoryBackground(account: string): string {
+    // You can map account types to specific colors or use your existing color system
+    return accountColorStyle(firstName(account)).replace('color:', 'background-color:');
   }
 </script>
 
@@ -69,6 +75,7 @@
   .category-icon {
     width: 40px;
     height: 40px;
+    padding-top: 4px;
     border-radius: 8px;
     border: solid;
     border-width: 1px;
@@ -139,37 +146,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
-  /* Filter buttons styling */
-  .filter-container {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  
-  .filter-btn {
-    background-color: #f0f0f0;
-    border: none;
-    color: #666;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .filter-btn.active {
-    background-color: #006064;
-    color: white;
-  }
-  
-  .filter-btn:hover:not(.active) {
-    background-color: #e0e0e0;
-  }
 </style>
 
 <div class="transaction-item has-background-white">
-  <div class="category-icon has-text-grey truncate custom-icon" style={getCategoryBorder(posting.account)} title={posting.account}>
+  <div class="category-icon has-text-grey truncate custom-icon" style="{getCategoryBorder(posting.account)} {getCategoryBackground(posting.account)}" title={posting.account}>
     <span style={accountColorStyle(firstName(posting.account))}
       >{iconText(posting.account)}</span
     >
