@@ -362,7 +362,7 @@
                   </div>
                   <div>
                     <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
-                      {#each filterTransactions(transactions) as transaction}
+                      {#each _.take(filterTransactions(transactions), 18) as transaction}
                         <div class="mr-3 is-flex-grow-1">
                           <TransactionCard t={transaction} />
                         </div>
