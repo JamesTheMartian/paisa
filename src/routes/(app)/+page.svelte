@@ -329,8 +329,8 @@
                   </p>
                   <div class="content box">
                     <div
-                      class="grid grid-rows-1 overflow-hidden"
-                      style="grid-auto-rows: 0px; grid-template-columns: repeat(auto-fit, minmax(130px, 150px));"
+                      class="grid grid-rows-1 overflow-hidden recurring-grid"
+                      style="grid-auto-rows: 0px; grid-template-columns: repeat(auto-fit, minmax(130px, 200px)); margin-left: 16px;"
                     >
                       {#each transactionSequences as ts (ts)}
                         <UpcomingCard transactionSequece={ts} />
@@ -387,6 +387,16 @@
   .subtitle a.secondary-link {
     text-transform: uppercase;
     font-size: 1rem;
+  }
+
+  .recurring-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .content {
+    border-radius: 10px;
   }
   
   .transaction-top {
