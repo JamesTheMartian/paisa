@@ -29,9 +29,9 @@
   }
   
   // Function to get appropriate icon background color
-  function getCategoryBackground(account: string): string {
+  function getCategoryBorder(account: string): string {
     // You can map account types to specific colors or use your existing color system
-    return accountColorStyle(firstName(account)).replace('color:', 'background-color:');
+    return accountColorStyle(firstName(account)).replace('color:', 'border-color:');
   }
 </script>
 
@@ -56,6 +56,8 @@
     width: 40px;
     height: 40px;
     border-radius: 8px;
+    border: solid;
+    border-width: 1px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -153,8 +155,10 @@
 </style>
 
 <div class="transaction-item has-background-white">
-  <div class="category-icon" style={getCategoryBackground(posting.account)}>
-    <span>{iconText(posting.account)}</span>
+  <div class="category-icon has-text-grey truncate custom-icon" style={getCategoryBorder(posting.account)} title={posting.account}>
+    <span style={accountColorStyle(firstName(posting.account))}
+      >{iconText(posting.account)}</span
+    >
   </div>
   
   <div class="transaction-details">
