@@ -32,14 +32,30 @@
   
   const amountCategory = getAmountCategory(amount);
   
-  // Get progress bar color
+  // Get progress bar color by value
   function getProgressColor(): string {
     if (amountCategory === "high-amount") return "#F87171";
     if (amountCategory === "medium-amount") return "#FBBF24";
     return "#34D399";
   }
+
+  // Get progress bar color by time
+  function getTimeColor(): string {
+    if (daysUntilDue < 3) return "#F87171";
+    if (daysUntilDue < 7) return "#FBBF24";
+    return "#34D399";
+  }
   
-  const progressColor = getProgressColor();
+  const progressColor = getTimeColor();
+
+  // Get color if it is urgent
+  function isUrgentColor(): string {
+    if (daysUntilDue < 3) return "#574343";
+    if (daysUntilDue < 7) return "#393A2D";
+    return "";
+  }
+
+  const isUrgent = isUrgentColor();
   
   // Get frequency class
   function getFrequencyClass(interval: number): string {
@@ -57,7 +73,7 @@
   }
 </script>
 
-<div class="payment-card {amountCategory}">
+<div class="payment-card {amountCategory}" style="background-color: {isUrgent};">
   <span class="payment-frequency {frequencyClass}">{capIntervalText(transactionSequece)}</span>
   <div class="payment-title">{transactionSequece.key}</div>
   <div class="payment-amount">{formatCurrencyCrude(amount)}</div>
@@ -77,7 +93,7 @@
     background-color: var(--card-bg, #202025);
     border-radius: 10px;
     padding: 16px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.15s ease, box-shadFBBF24ow 0.15s ease;
     position: relative;
     overflow: hidden;
     height: 100%;
