@@ -195,15 +195,16 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12 pb-0">
-        <div class="box pt-0 overflow-x-auto max-h-screen max-w-fit">
+        <div class="box pt-0 overflow-x-auto max-h-screen">
           <table
-            class="table is-narrow is-hoverable is-light-border has-sticky-header has-sticky-column"
+            class="table is-narrow is-hoverable is-light-border has-sticky-header has-sticky-column has-sticky-footer"
+            style="width:100%"
           >
             <thead>
               <tr>
                 <th class="py-2">Account</th>
                 {#each years as y}
-                  <th class="py-2 has-text-right">{y}</th>
+                  <th class="py-2 has-text-right" style="padding-left: 1em; padding-right: 1em;">{y}</th>
                 {/each}
               </tr>
             </thead>

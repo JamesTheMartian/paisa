@@ -25,21 +25,37 @@
   const amount = totalRecurring(transactionSequece);
   function getAmountCategory(amount: number): string {
     const absAmount = Math.abs(amount);
-    if (absAmount >= 5000) return "high-amount";
+    if (absAmount >= 2500) return "high-amount";
     if (absAmount >= 1000) return "medium-amount";
     return "low-amount";
   }
   
   const amountCategory = getAmountCategory(amount);
   
-  // Get progress bar color
+  // Get progress bar color by value
   function getProgressColor(): string {
     if (amountCategory === "high-amount") return "#F87171";
     if (amountCategory === "medium-amount") return "#FBBF24";
     return "#34D399";
   }
+
+  // Get progress bar color by time
+  function getTimeColor(): string {
+    if (daysUntilDue < 3) return "#F87171";
+    if (daysUntilDue < 7) return "#FBBF24";
+    return "#34D399";
+  }
   
-  const progressColor = getProgressColor();
+  const progressColor = getTimeColor();
+
+  // Get color if it is urgent
+  function isUrgentColor(): string {
+    if (daysUntilDue < 3) return "#574343";
+    if (daysUntilDue < 7) return "#393A2D";
+    return "";
+  }
+
+  const isUrgent = isUrgentColor();
   
   // Get frequency class
   function getFrequencyClass(interval: number): string {
@@ -50,17 +66,62 @@
   
   const frequencyClass = getFrequencyClass(transactionSequece.interval);
 
-  // Capitalaize interval text
+  // Capitalize interval text
   function capIntervalText(ts: TransactionSequence): string {
     const text = intervalText(transactionSequece)
     return text.charAt(0).toUpperCase() + text.slice(1);
   }
+  
+  // Get shape indicator based on amount category
+  function getShapeIndicator(category: string): string {
+    if (category === "high-amount") return "triangle";
+    if (category === "medium-amount") return "square";
+    return "circle";
+  }
+  
+  const shapeIndicator = getShapeIndicator(amountCategory);
+  
+  // Get pattern settings based on amount category
+  function getPatternStyle(category: string): string {
+    // Base color with very low opacity for subtlety
+    const baseColor = category === "high-amount" 
+                    ? "rgba(248, 113, 113, 0.06)" 
+                    : category === "medium-amount" 
+                      ? "rgba(251, 191, 36, 0.06)" 
+                      : "rgba(52, 211, 153, 0.06)";
+    
+    if (category === "high-amount") {
+      // Zigzag pattern for high amounts
+      return `background: linear-gradient(135deg, ${baseColor} 30%, transparent 30%) -5px 0,
+              linear-gradient(225deg, ${baseColor} 30%, transparent 30%) -5px 0,
+              linear-gradient(315deg, ${baseColor} 30%, transparent 30%),
+              linear-gradient(45deg, ${baseColor} 30%, transparent 30%);
+              background-size: 10px 10px;`;
+    } else if (category === "medium-amount") {
+      // Diagonal lines (medium density) for medium amounts
+      return `background-image: 
+                linear-gradient(45deg, ${baseColor} 25%, transparent 25%),
+                linear-gradient(-45deg, ${baseColor} 25%, transparent 25%);
+              background-size: 10px 10px;`;
+    } else {
+      // Dots (sparse) for low amounts
+      return `background-image: radial-gradient(${baseColor} 2.5px, transparent 2.5px);
+              background-size: 14px 14px;`;
+    }
+  }
+  
+  const patternStyle = getPatternStyle(amountCategory);
 </script>
 
-<div class="payment-card {amountCategory}">
-  <span class="payment-frequency {frequencyClass}">{capIntervalText(transactionSequece)}</span>
+<div class="payment-card {amountCategory}" style="background-color: {isUrgent}; {patternStyle}">
   <div class="payment-title">{transactionSequece.key}</div>
-  <div class="payment-amount">{formatCurrencyCrude(amount)}</div>
+  <span class="payment-frequency {frequencyClass}">{capIntervalText(transactionSequece)}</span>
+  <div class="payment-amount">
+    <div style="color: {progressColor}">
+      {formatCurrencyCrude(amount)}
+    </div>
+    <span class="shape-indicator {shapeIndicator}"></span>
+  </div>
   <div class="progress-container">
     <div class="progress-bar">
       <div class="progress-fill" style="width: {progressPercentage}%; background-color: {progressColor};"></div>
@@ -103,6 +164,10 @@
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 16px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   
   .high-amount .payment-amount {
@@ -115,6 +180,27 @@
   
   .low-amount .payment-amount {
     color: var(--low-amount-color, #34D399);
+  }
+  
+  /* Shape Indicators */
+  .shape-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-color: currentColor;
+  }
+  
+  .circle {
+    border-radius: 50%;
+  }
+  
+  .square {
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+  
+  .triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   }
   
   .progress-container {
@@ -150,7 +236,6 @@
     border-radius: 4px;
     padding: 2px 6px;
     font-size: 11px;
-    position: absolute;
     top: 16px;
     right: 16px;
   }
