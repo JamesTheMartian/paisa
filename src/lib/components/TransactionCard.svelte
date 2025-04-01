@@ -184,6 +184,6 @@
   </div>
   
   <div class="transaction-amount" style={getAmountColor(posting.account)}>
-    {formatCurrency(posting.amount)}
+    {posting.commodity} {formatCurrency(posting.amount)}
   </div>
 </div>
