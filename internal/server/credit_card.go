@@ -106,6 +106,7 @@ func buildCreditCard(db *gorm.DB, creditCardConfig config.CreditCard, ps []posti
 		CreditLimit:    decimal.NewFromInt(int64(creditCardConfig.CreditLimit)),
 		YearlySpends:   ys,
 		ExpirationDate: expirationDate,
+		Color:		    creditCardConfig.Color,
 	}
 }
 
