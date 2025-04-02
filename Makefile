@@ -2,7 +2,7 @@
 .PHONY: fixture/main.transactions.json
 
 develop:
-	./node_modules/.bin/concurrently --names "GO,JS" -c "auto" "make serve" "npm run dev"
+	./node_modules/.bin/concurrently --names "GO,JS" -c "auto" "make serve" "npm run dev" &
 
 serve:
 	./node_modules/.bin/nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,json --exec 'go run . serve || exit 1'
@@ -62,6 +62,11 @@ install:
 	npm run build
 	go build
 	go install
+
+install-dev:
+	npm run build
+	go build
+	sudo mv paisa /usr/bin/paisa-dev
 
 fixture/main.transactions.json:
 	cd /tmp && paisa init

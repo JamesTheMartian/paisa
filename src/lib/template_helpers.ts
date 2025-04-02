@@ -234,7 +234,8 @@ export default {
   },
   findBelow(column: string, options: any) {
     const regexp = new RegExp(options.hash.regexp || ".+");
-    let i: number = options.data.root.ROW.index + 1;
+    const rowOffset = options.hash.row || 1; // Default to 1 row below
+    let i: number = options.data.root.ROW.index + rowOffset;
     while (i < options.data.root.SHEET.length) {
       const row = options.data.root.SHEET[i];
       const cell = row[column] || "";

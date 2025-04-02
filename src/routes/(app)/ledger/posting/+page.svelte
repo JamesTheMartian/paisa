@@ -92,8 +92,8 @@
     </div>
     <div class="columns">
       <div class="column is-12">
-        <div class="box overflow-x-auto" style="max-width: 98rem;">
-          <div style="width: 98rem;">
+        <div class="box overflow-x-auto" style="max-width: 100rem">
+          <div style="width: 100rem;">
             <div
               class="px-3 pt-1 grid grid-cols-7x gap-1 posting-row items-baseline has-text-weight-bold"
             >
@@ -109,7 +109,7 @@
               <div class="has-text-right">CAGR</div>
             </div>
             <VirtualList
-              height={window.innerHeight - 245}
+              height={window.innerHeight - 250}
               itemCount={filteredPostings.length}
               itemSize={27}
             >
@@ -122,7 +122,7 @@
               >
                 {@const p = filteredPostings[index]}
                 {@const c = change(p)}
-                <div>{p.date.format("DD MMM YYYY")}</div>
+                <div style="width: 10em;">{p.date.format("DD MMM YYYY")}</div>
                 <div class="is-size-7 truncate" title={p.payee}>
                   <PostingStatus posting={p} />
                   <PostingNote posting={p} />
