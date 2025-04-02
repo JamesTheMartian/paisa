@@ -26,6 +26,7 @@ type CreditCardSummary struct {
 	CreditLimit    decimal.Decimal                       `json:"creditLimit"`
 	YearlySpends   map[string]map[string]decimal.Decimal `json:"yearlySpends"`
 	ExpirationDate time.Time                             `json:"expirationDate"`
+	Color		   string                                `json:"color"`
 }
 
 type CreditCardBill struct {

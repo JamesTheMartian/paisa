@@ -1068,7 +1068,8 @@
           "account": "Liabilities:CreditCard:Chase",
           "credit_limit": 100000,
           "statement_end_day": 28,
-          "due_day": 15
+          "due_day": 15,
+          "color": "blue"
         }
       ],
       "items": {
@@ -1112,6 +1113,11 @@
             "type": "string",
             "description": "Expiration date of the card",
             "format": "date"
+          },
+          "color": {
+            "type": "string",
+            "description": "Color",
+            "enum": ["red", "blue", "green", "yellow", "purple", "pink", "orange"]
           }
         },
         "required": [
@@ -1121,7 +1127,8 @@
           "due_day",
           "network",
           "number",
-          "expiration_date"
+          "expiration_date",
+          "color"
         ],
         "additionalProperties": false
       }
