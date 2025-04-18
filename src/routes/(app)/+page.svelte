@@ -32,6 +32,7 @@
   import GoalSummaryCard from "$lib/components/GoalSummaryCard.svelte";
   import LegendCard from "$lib/components/LegendCard.svelte";
   import BalanceCard from "$lib/components/BalanceCard.svelte";
+    import BoxedTabs from "$lib/components/BoxedTabs.svelte";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
@@ -104,6 +105,13 @@
   });
 
   // Add filter state
+
+  let options: { label: string; value: string }[] = [
+    { label: "All", value: "all" },
+    { label: "Income", value: "income" },
+    { label: "Expenses", value: "expense" }
+  ];
+
   let currentFilter = "all"; // "all", "income", "expense"
 
   const incomeAccounts = ["Income", "Assets"];
@@ -112,7 +120,8 @@
     if (currentFilter === "all") return transactions;
     if (currentFilter === "income") {
       return transactions.filter(t => {
-        // Check if any posting account starts with "Income"
+        // Check if any posting account starts with incomeAccounts
+        // This is a simplified check, you might want to adjust it based on your account structure
         return t.postings.some(posting => posting.account.startsWith("Income"));
       });
     }
@@ -351,14 +360,9 @@
                     <a class="secondary-link has-text-grey" href="/ledger/transaction"
                       >Recent Transactions</a
                     >
-                    <div class="filter-container">
-                      <button class="filter-btn {currentFilter === 'all' ? 'active' : ''}" 
-                              on:click={() => currentFilter = 'all'}>All</button>
-                      <button class="filter-btn {currentFilter === 'income' ? 'active' : ''}" 
-                              on:click={() => currentFilter = 'income'}>Income</button>
-                      <button class="filter-btn {currentFilter === 'expense' ? 'active' : ''}" 
-                              on:click={() => currentFilter = 'expense'}>Expenses</button>
-                    </div>
+                    <BoxedTabs
+                      bind:value={currentFilter}
+                      options={options} />
                   </div>
                   <div>
                     <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">

@@ -6,6 +6,7 @@
     formatCurrency,
     postingUrl,
     restName,
+    lastName,
     type Posting,
     type Transaction,
     firstName
@@ -174,7 +175,7 @@
       <a href={postingUrl(posting)}>{posting.payee}</a>
     </div>
     <div class="transaction-category">
-      {restName(posting.account)}
+      {lastName(posting.account)}
       <TransactionNote transaction={t} />
     </div>
   </div>
