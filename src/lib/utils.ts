@@ -1013,27 +1013,37 @@ function beginningOfFinancialYear(date: dayjs.Dayjs) {
   }
 }
 
+function virtualPosting(account: string) {
+  return account.replace(/^\[|\]|\(.*?\)/g, "")
+}
+
 export function firstName(account: string) {
+  account = virtualPosting(account);
   return _.first(account.split(":"));
 }
 
 export function lastName(account: string) {
+  account = virtualPosting(account);
   return _.last(account.split(":"));
 }
 
 export function secondName(account: string) {
+  account = virtualPosting(account);
   return account.split(":")[1];
 }
 
 export function firstNames(account: string, n: number) {
+  account = virtualPosting(account);
   return _.take(account.split(":"), n).join(":");
 }
 
 export function restName(account: string) {
+  account = virtualPosting(account);
   return _.drop(account.split(":")).join(":");
 }
 
 export function parentName(account: string) {
+  account = virtualPosting(account);
   return _.dropRight(account.split(":"), 1).join(":");
 }
 
