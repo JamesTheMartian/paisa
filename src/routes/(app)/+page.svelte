@@ -119,7 +119,7 @@
     if (currentFilter === "expense") {
       // Transactions that don't have any Income accounts are expenses
       return transactions.filter(t => {
-        return !t.postings.some(posting => posting.account.startsWith("Income"));
+        return t.postings.some(posting => posting.account.startsWith("Expenses"));
       });
     }
     return transactions;
@@ -363,8 +363,9 @@
                   <div>
                     <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
                       {#each _.take(filterTransactions(transactions), 18) as transaction}
+                      {@const t = (currentFilter === 'all' ? transaction : transaction)}
                         <div class="mr-3 is-flex-grow-1">
-                          <TransactionCard t={transaction} />
+                          <TransactionCard {t} />
                         </div>
                       {/each}
                     </UntypedMasonryGrid>
