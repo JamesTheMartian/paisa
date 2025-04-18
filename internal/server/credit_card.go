@@ -26,6 +26,7 @@ type CreditCardSummary struct {
 	CreditLimit    decimal.Decimal                       `json:"creditLimit"`
 	YearlySpends   map[string]map[string]decimal.Decimal `json:"yearlySpends"`
 	ExpirationDate time.Time                             `json:"expirationDate"`
+	Color		   string                                `json:"color"`
 }
 
 type CreditCardBill struct {
@@ -105,6 +106,7 @@ func buildCreditCard(db *gorm.DB, creditCardConfig config.CreditCard, ps []posti
 		CreditLimit:    decimal.NewFromInt(int64(creditCardConfig.CreditLimit)),
 		YearlySpends:   ys,
 		ExpirationDate: expirationDate,
+		Color:		    creditCardConfig.Color,
 	}
 }
 

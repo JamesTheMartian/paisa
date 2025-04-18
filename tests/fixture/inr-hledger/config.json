@@ -288,6 +288,11 @@
               "maximum": 31,
               "minimum": 1,
               "type": "integer"
+            },
+            "color": {
+              "type": "string",
+              "description": "Color",
+              "enum": ["red", "blue", "green", "yellow", "purple", "pink", "orange"]
             }
           },
           "required": [
@@ -297,7 +302,8 @@
             "due_day",
             "network",
             "number",
-            "expiration_date"
+            "expiration_date",
+            "color"
           ],
           "type": "object",
           "ui:header": "account"

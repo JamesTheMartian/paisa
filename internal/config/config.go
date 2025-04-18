@@ -123,6 +123,7 @@ type CreditCard struct {
 	Network         string `json:"network" yaml:"network"`
 	Number          string `json:"number" yaml:"number"`
 	ExpirationDate  string `json:"expiration_date" yaml:"expiration_date"`
+	Color			string `json:"color" yaml:"color"`
 }
 
 type Config struct {
