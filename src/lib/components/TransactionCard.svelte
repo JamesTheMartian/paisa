@@ -22,7 +22,7 @@
   
   // Helper function to determine if a transaction is an expense
   function isExpense(account: string): boolean {
-    return firstName(account) === "Expenses" || firstName(account) === "Liabilities";
+    return account.startsWith("Expenses");
   }
 
   // Helper function to get appropriate amount class
@@ -75,17 +75,30 @@
   .transaction-item {
     display: flex;
     align-items: center;
-    background-color: #ffffff;
     border-radius: 8px;
     padding: 12px 16px;
     margin-bottom: 12px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
-  
-  .transaction-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  .transaction-item::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 4px;
+    bottom: 12px;
+    left: 0;
+    background-color: #207fac;
+    transform-origin: bottom right;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    transition: transform 0.5s ease-out;
+  }
+
+  .transaction-item:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
   }
   
   .category-icon {
