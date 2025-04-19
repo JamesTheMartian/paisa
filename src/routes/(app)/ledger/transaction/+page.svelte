@@ -180,7 +180,7 @@
           <div class="box">
             <VirtualList
               width="100%"
-              height={window.innerHeight - 150}
+              height={window.innerHeight - 250}
               itemCount={filtered.length}
               {itemSize}
             >
