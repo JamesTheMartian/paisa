@@ -144,10 +144,25 @@
     height: 100%;
     color: var(--text-color, #E4E4E7);
   }
-  
-  .payment-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+  .payment-card::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    bottom: 0;
+    height: 4px;
+    left: 0;
+    background-color: #207fac;
+    transform-origin: bottom right;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    transition: transform 0.5s ease-out;
+  }
+
+  .payment-card:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
   }
   
   .payment-title {

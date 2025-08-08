@@ -1,0 +1,52 @@
+{{#if (isDate ROW.C "YYYY-MM-DD HH:mm:ss")}}
+  {{date ROW.C "YYYY-MM-DD HH:mm:ss"}} {{#if (or ROW.J (eq (trim ROW.A) "UPI Lite") (eq (trim ROW.A) "UPI Lite X") (eq (trim ROW.A) "Wallet"))}}* {{else}}! {{/if}}{{#if ROW.K}}({{trim ROW.K}}) {{/if}}{{#if (regexpTest ROW.G "\[.*?\]")}}Manirattan{{else}}{{ROW.D}}{{/if}}
+  {{#if ROW.I}}
+  	; Method: {{trim ROW.I}}
+  {{/if}}
+  {{#if ROW.K}}
+  	; Reference number: {{trim ROW.K}}
+  {{/if}}
+  {{#if	ROW.H}}
+  	; {{trim ROW.H}}
+  {{/if}}
+  {{#if ROW.M}}
+  	; :{{replace ROW.M ", " ":"}}:
+  {{/if}}
+  {{#if (eq (trim ROW.E) "0")}}
+  	{{#if ROW.A}}
+      {{or (match ROW.A Liabilities:CreditCard:ICICI="ICICI Credit Card" Liabilities:CreditCard:SBI="^Credit Card" Assets:Checking:Savings="Savings" Assets:Checking:UPILite="UPI Lite" Assets:Checking:UPILiteX="UPI Lite X" Assets:Checking:Wallet="Wallet" Assets:FixedDeposit:SBI="Fixed Deposit" Assets:Equity:PPF="PPF")}}  {{#if ROW.N}}{{negate (trim ROW.N)}} {{trim ROW.O}} (({{trim ROW.F}}/{{trim ROW.N}} INR)){{else}}{{negate (trim ROW.F)}} INR{{/if}}
+    {{/if}}
+    {{#if (regexpTest ROW.G "\[.*?\]")}}
+      {{match ROW.G Assets:Equity:PPF="\[PPF\]" Assets:FixedDeposit:SBI="\[Fixed Deposit\]" Liabilities:CreditCard:ICICI="\[ICICI Credit Card\]" Liabilities:CreditCard:SBI="\[Credit Card\]" Assets:Checking:Savings="\[Savings\]" Assets:Checking:UPILite="\[UPI Lite\]" Assets:Checking:UPILiteX="\[UPI Lite X\]" Assets:Checking:Wallet="\[Wallet\]"}}
+    {{else if (regexpTest ROW.G "^Taxes.*?")}}
+    	Expenses:Tax:{{replace ROW.G "Taxes > " ""}}
+    {{else if (regexpTest ROW.M "Loan")}}
+    	Liabilities:Loan:{{trim ROW.H}}
+    {{else if ROW.G}}
+    	Expenses:{{replace ROW.G " > " ":"}}
+    {{else}}
+    	Expenses:Unknown
+    {{/if}}
+  {{else if (not (regexpTest ROW.G "\[.*?\]"))}}
+    {{#if ROW.A}}
+      {{or (match ROW.A Liabilities:CreditCard:ICICI="ICICI Credit Card" Liabilities:CreditCard:SBI="^Credit Card" Assets:Checking:Savings="Savings" Assets:Checking:UPILite="UPI Lite" Assets:Checking:UPILiteX="UPI Lite X" Assets:Checking:Wallet="Wallet" Assets:FixedDeposit:SBI="Fixed Deposit" Assets:Equity:PPF="PPF")}}  {{#if ROW.N}}{{trim ROW.N}} {{trim ROW.O}} (({{trim ROW.E}}/{{trim ROW.N}} INR)){{else}}{{trim ROW.E}} INR{{/if}}
+    {{/if}}
+    {{#if (regexpTest ROW.M "Cashback")}}
+    	Income:Misc. income:Refunds
+    {{else if (regexpTest ROW.M "Refund")}}
+    	Expenses:{{replace ROW.G " > " ":"}}
+    {{else if (regexpTest ROW.M "Loan")}}
+    	Liabilities:Loan:{{trim ROW.H}}
+    {{else if (eq (trim ROW.G) "Investment income > Interest")}}
+    	Income:Interest:{{trim ROW.A}}
+    {{else if (eq ROW.H "Initial Balance")}}
+    	Equity:Opening Balances
+    {{else if (regexpTest ROW.G "^Retirement.*?")}}
+    	Income:Interest:{{replace ROW.G " > " ":"}}
+    {{else if ROW.G}}
+    	Income:{{replace ROW.G " > " ":"}}
+    {{else}}
+    	Income:Unknown
+    {{/if}}
+  {{/if}}
+{{/if}}

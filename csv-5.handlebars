@@ -1,0 +1,65 @@
+{{#if (and ( isDate ROW.C "YYYY-MM-DD HH:mm:ss" ) ( not ( eq (trim ROW.B) "-" ) ) ) }}
+  {{date ROW.C "YYYY-MM-DD HH:mm:ss"}} {{#if (or ROW.J (eq (trim ROW.A) "UPI Lite") (eq (trim ROW.A) "UPI Lite X") (eq (trim ROW.A) "Wallet"))}}* {{else}}! {{/if}}{{#if ROW.K}}({{trim ROW.K}}) {{/if}}{{#if (regexpTest ROW.G "\[.*?\]")}}Manirattan{{else}}{{ROW.D}}{{/if}}
+  {{#if ROW.I}}
+  	; Method: {{trim ROW.I}}
+  {{/if}}
+  {{#if ROW.K}}
+  	; Reference number: {{trim ROW.K}}
+  {{/if}}
+  {{#if	ROW.H}}
+  	; {{trim ROW.H}}
+  {{/if}}
+  {{#if ROW.M}}
+  	; :{{replace ROW.M ", " ":"}}:
+  {{/if}}
+  {{#if (eq (trim ROW.E) "0")}}
+  	{{#if ROW.A}}
+      {{or (match ROW.A Liabilities:CreditCard:ICICI="ICICI Credit Card" Liabilities:CreditCard:SBI="^Credit Card" Assets:Checking:Savings="Savings" Assets:Checking:UPILite="UPI Lite" Assets:Checking:UPILiteX="UPI Lite X" Assets:Checking:Wallet="Wallet" Assets:FixedDeposit:SBI="Fixed Deposit" Assets:Equity:PPF="PPF")}}  {{#if ROW.N}}{{negate (trim ROW.N)}} {{trim ROW.O}} (({{trim ROW.F}}/{{trim ROW.N}} INR)){{else}}{{negate (trim ROW.F)}} INR{{/if}}
+    {{/if}}
+    {{#if ( eq ( trim ROW.B ) "*" )}}
+        {{#if ( eq ( findBelow B row=1 ) "-" )}}
+            Expenses:{{replace ( findBelow G ) " > " ":"}}  {{#if ROW.N}}{{trim ( findBelow N row=1 )}} {{trim ( findBelow O )}} (({{trim ( findBelow F )}}/{{trim ( findBelow N )}} INR)){{else}}{{trim ( findBelow F )}} INR{{/if}}
+        {{/if}}
+        {{#if ( eq ( findBelow B row=2 ) "-" )}}
+            Expenses:{{replace ( findBelow G row=2 ) " > " ":"}}  {{#if ROW.N}}{{trim ( findBelow N row=2 )}} {{trim ( findBelow O row=2 )}} (({{trim ( findBelow F row=2 )}}/{{trim ( findBelow N row=2 )}} INR)){{else}}{{trim ( findBelow F row=2 )}} INR{{/if}}
+        {{/if}}
+        {{#if ( eq ( findBelow B row=3 ) "-" )}}
+            Expenses:{{replace ( findBelow G row=3 ) " > " ":"}}  {{#if ROW.N}}{{trim ( findBelow N row=3 )}} {{trim ( findBelow O row=3 )}} (({{trim ( findBelow F row=3 )}}/{{trim ( findBelow N row=3 )}} INR)){{else}}{{trim ( findBelow F row=3 )}} INR{{/if}}
+        {{/if}}
+        {{#if ( eq ( findBelow B row=4 ) "-" )}}
+            Expenses:{{replace ( findBelow G row=4 ) " > " ":"}}  {{#if ROW.N}}{{trim ( findBelow N row=4 )}} {{trim ( findBelow O row=4 )}} (({{trim ( findBelow F row=4 )}}/{{trim ( findBelow N row=4 )}} INR)){{else}}{{trim ( findBelow F row=4 )}} INR{{/if}}
+        {{/if}}
+    {{else if (regexpTest ROW.G "\[.*?\]")}}
+      {{match ROW.G Assets:Equity:PPF="\[PPF\]" Assets:FixedDeposit:SBI="\[Fixed Deposit\]" Liabilities:CreditCard:ICICI="\[ICICI Credit Card\]" Liabilities:CreditCard:SBI="\[Credit Card\]" Assets:Checking:Savings="\[Savings\]" Assets:Checking:UPILite="\[UPI Lite\]" Assets:Checking:UPILiteX="\[UPI Lite X\]" Assets:Checking:Wallet="\[Wallet\]"}}
+    {{else if (regexpTest ROW.G "^Taxes.*?")}}
+    	Expenses:Tax:{{replace ROW.G "Taxes > " ""}}
+    {{else if (regexpTest ROW.M "Loan")}}
+    	Liabilities:Loan:{{trim ROW.H}}
+    {{else if ROW.G}}
+    	Expenses:{{replace ROW.G " > " ":"}}
+    {{else}}
+    	Expenses:Unknown
+    {{/if}}
+  {{else if (not (regexpTest ROW.G "\[.*?\]"))}}
+    {{#if ROW.A}}
+      {{or (match ROW.A Liabilities:CreditCard:ICICI="ICICI Credit Card" Liabilities:CreditCard:SBI="^Credit Card" Assets:Checking:Savings="Savings" Assets:Checking:UPILite="UPI Lite" Assets:Checking:UPILiteX="UPI Lite X" Assets:Checking:Wallet="Wallet" Assets:FixedDeposit:SBI="Fixed Deposit" Assets:Equity:PPF="PPF")}}  {{#if ROW.N}}{{trim ROW.N}} {{trim ROW.O}} (({{trim ROW.E}}/{{trim ROW.N}} INR)){{else}}{{trim ROW.E}} INR{{/if}}
+    {{/if}}
+    {{#if (regexpTest ROW.M "Cashback")}}
+    	Income:Misc. income:Refunds
+    {{else if (regexpTest ROW.M "Refund")}}
+    	Expenses:{{replace ROW.G " > " ":"}}
+    {{else if (regexpTest ROW.M "Loan")}}
+    	Liabilities:Loan:{{trim ROW.H}}
+    {{else if (eq (trim ROW.G) "Investment income > Interest")}}
+    	Income:Interest:{{trim ROW.A}}
+    {{else if (eq ROW.H "Initial Balance")}}
+    	Equity:Opening Balances
+    {{else if (regexpTest ROW.G "^Retirement.*?")}}
+    	Income:Interest:{{replace ROW.G " > " ":"}}
+    {{else if ROW.G}}
+    	Income:{{replace ROW.G " > " ":"}}
+    {{else}}
+    	Income:Unknown
+    {{/if}}
+  {{/if}}
+{{/if}}
