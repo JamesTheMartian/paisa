@@ -68,6 +68,9 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 	if config.GetConfig().Strict == config.Yes {
 		args = append(args, "--pedantic")
 	}
+    if config.GetConfig().Effective == config.Yes {
+        args = append(args, "--effective")
+    }
 	args = append(args, "-f", journalPath, "balance")
 	err = utils.Exec(ledgerPath, &output, &error, args...)
 	if err == nil {
@@ -88,13 +91,19 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
-	postings, err := execLedgerCommand(journalPath, []string{})
+	flags := []string{}
+	if config.GetConfig().Effective == config.Yes {
+		flags = append(flags, "--effective")
+	}
+
+	postings, err := execLedgerCommand(journalPath, flags)
 
 	if err != nil {
 		return nil, err
 	}
 
-	budgetPostings, err := execLedgerCommand(journalPath, []string{"--now", strconv.Itoa(utils.Now().Year() + 3), "--budget"})
+	budgetFlags := append(flags, "--now", strconv.Itoa(utils.Now().Year()+3), "--budget")
+	budgetPostings, err := execLedgerCommand(journalPath, budgetFlags)
 	budgetPostings = lo.Filter(budgetPostings, func(p *posting.Posting, _ int) bool {
 		return p.Payee == "Budget transaction"
 	})
@@ -115,7 +124,12 @@ func (LedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	}
 
 	var output, error bytes.Buffer
-	err = utils.Exec(ledgerPath, &output, &error, "--args-only", "-f", journalPath, "pricesdb", "--pricedb-format", "P %(datetime) %(display_account) %(quantity(scrub(display_amount))) %(commodity(scrub(display_amount)))\n")
+	args := []string{"--args-only", "-f", journalPath}
+	if config.GetConfig().Effective == config.Yes {
+		args = append(args, "--effective")
+	}
+	args = append(args, "pricesdb", "--pricedb-format", "P %(datetime) %(display_account) %(quantity(scrub(display_amount))) %(commodity(scrub(display_amount)))\n")
+	err = utils.Exec(ledgerPath, &output, &error, args...)
 	if err != nil {
 		log.Error(error.String())
 		return prices, err

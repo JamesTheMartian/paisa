@@ -681,6 +681,12 @@
       "description": "When strict mode is enabled, all the accounts and commodities should be defined before use.",
       "enum": ["", "yes", "no"]
     },
+    "effective": {
+      "ui:widget": "boolean",
+      "type": "string",
+      "description": "When effective mode is enabled, effective or auxilary dates are considered.",
+      "enum": ["", "yes", "no"]
+    },
     "retirement": {
       "type": "object",
       "ui:widget": "hidden"

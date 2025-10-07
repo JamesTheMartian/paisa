@@ -140,6 +140,7 @@ type Config struct {
 	FinancialYearStartingMonth time.Month   `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
 	WeekStartingDay            time.Weekday `json:"week_starting_day" yaml:"week_starting_day"`
 	Strict                     BoolType     `json:"strict" yaml:"strict"`
+	Effective                  BoolType     `json:"effective" yaml:"effective"`
 
 	Budget Budget `json:"budget" yaml:"budget"`
 
@@ -175,6 +176,7 @@ var defaultConfig = Config{
 	Budget:                     Budget{Rollover: Yes},
 	FinancialYearStartingMonth: 4,
 	Strict:                     No,
+	Effective:                  No,
 	WeekStartingDay:            0,
 	ScheduleALs:                []ScheduleAL{},
 	AllocationTargets:          []AllocationTarget{},
